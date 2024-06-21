@@ -46,7 +46,41 @@ def file_format_verification(folder_path):
         logging.error(f"Error during file format verification: {e}")
         return None
 
+def extract_text_from_pdf(pdf_path):
+    try:
+        doc = fitz.open(pdf_path)
+        text = ""
+        for page in doc:
+            images = page.get_images()
+            if images:
+                for img_index, img_info in enumerate(images):
+                    xref = img_info[0]
+                    base_image = doc.extract_image(xref)
+                    image_bytes = base_image["image"]
+                    image = Image.open(io.BytesIO(image_bytes))
+                    text += pytesseract.image_to_string(image)
+            elif not images:  
+                text += page.get_text()
+            else:  
+                logging.warning(f"Unsupported format in PDF: {pdf_path}")
+                return None
+        logging.info(f"Text extracted from PDF: {pdf_path}")
+        return text.strip()
+    except Exception as e:
+        logging.error(f"Error extracting text from PDF: {e}")
+        return None
 
+def extract_text_from_docx(file_path):
+    try:
+        doc = Document(file_path)
+        text = ""
+        for paragraph in doc.paragraphs:
+            text += paragraph.text + "\n"
+        logging.info(f"Text extracted from DOCX: {file_path}")
+        return text
+    except Exception as e:
+        logging.error(f"Error extracting text from DOCX: {e}")
+        return None
 
 
 
