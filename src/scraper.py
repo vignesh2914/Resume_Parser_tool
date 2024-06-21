@@ -81,6 +81,16 @@ def extract_text_from_docx(file_path):
     except Exception as e:
         logging.error(f"Error extracting text from DOCX: {e}")
         return None
+    
+def extract_text_from_image(image_path, config="--psm 11 --oem 3"):
+    try:
+        with Image.open(image_path) as img:
+            text = pytesseract.image_to_string(img, config=config)
+            logging.info(f"Text extracted from image: {image_path}")
+            return text.strip()
+    except Exception as e:
+        logging.error(f"Error extracting text from image: {e}")
+        return None
 
 
 
