@@ -17,3 +17,7 @@ Unsupported Formats
 
 GIF (.gif)
 Others: Any format not listed above
+
+# Update from 22-10-24 
+
+- Focusing on gettting relevent content well structured format eg) name,exp etc
